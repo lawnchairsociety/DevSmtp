@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+
+    <PackageId>DevSmtp</PackageId>
+    <Version>1.0.0-alpha1667721574</Version>
+    <Authors>Ben Stoker</Authors>
+    <WebPage>https://ben.stoker.site</WebPage>
+    <Product>DevSmtp</Product>
+    <RepositoryUrl>https://github.com/lawnchairsociety/DevSmtp.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+
+    <AssemblyName>DevSmtp</AssemblyName>
+  </PropertyGroup>
+
+</Project>
