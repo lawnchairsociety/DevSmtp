@@ -251,7 +251,7 @@ func TestGetUnreadCount(t *testing.T) {
 		if err := db.SaveMessage(msg); err != nil {
 			t.Fatalf("failed to save message: %v", err)
 		}
-		db.MarkAsRead(msg.ID)
+		_ = db.MarkAsRead(msg.ID)
 	}
 
 	count, err := db.GetUnreadCount()

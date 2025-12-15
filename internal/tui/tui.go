@@ -140,7 +140,6 @@ type model struct {
 
 type logMsg smtp.LogEntry
 type refreshMsg struct{}
-type tickMsg time.Time
 
 func Run(db *database.DB, cfg *config.Config, logChan <-chan smtp.LogEntry) error {
 	m := initialModel(db, cfg, logChan)
@@ -251,9 +250,9 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 					m.updateDetailContent()
 				}
 			} else if m.activePanel == messageDetailPanel {
-				m.detailViewport.LineUp(1)
+				m.detailViewport.ScrollUp(1)
 			} else {
-				m.logViewport.LineUp(1)
+				m.logViewport.ScrollUp(1)
 			}
 			return m, nil
 
@@ -264,32 +263,32 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 					m.updateDetailContent()
 				}
 			} else if m.activePanel == messageDetailPanel {
-				m.detailViewport.LineDown(1)
+				m.detailViewport.ScrollDown(1)
 			} else {
-				m.logViewport.LineDown(1)
+				m.logViewport.ScrollDown(1)
 			}
 			return m, nil
 
 		case "pgup":
 			if m.activePanel == messageDetailPanel {
-				m.detailViewport.HalfViewUp()
+				m.detailViewport.HalfPageUp()
 			} else if m.activePanel == logPanel {
-				m.logViewport.HalfViewUp()
+				m.logViewport.HalfPageUp()
 			}
 			return m, nil
 
 		case "pgdown":
 			if m.activePanel == messageDetailPanel {
-				m.detailViewport.HalfViewDown()
+				m.detailViewport.HalfPageDown()
 			} else if m.activePanel == logPanel {
-				m.logViewport.HalfViewDown()
+				m.logViewport.HalfPageDown()
 			}
 			return m, nil
 
 		case "enter":
 			if m.activePanel == messageListPanel && len(m.messages) > 0 {
 				msg := m.messages[m.selectedIdx]
-				m.db.MarkAsRead(msg.ID)
+				_ = m.db.MarkAsRead(msg.ID)
 				m.messages[m.selectedIdx].IsRead = true
 				m.activePanel = messageDetailPanel
 				m.updateDetailContent()
@@ -299,7 +298,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case "d":
 			if len(m.messages) > 0 {
 				msg := m.messages[m.selectedIdx]
-				m.db.DeleteMessage(msg.ID)
+				_ = m.db.DeleteMessage(msg.ID)
 				m.messages, _ = m.db.GetMessages()
 				if m.selectedIdx >= len(m.messages) && m.selectedIdx > 0 {
 					m.selectedIdx--
@@ -309,7 +308,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, nil
 
 		case "D":
-			m.db.DeleteAllMessages()
+			_ = m.db.DeleteAllMessages()
 			m.messages = []database.Message{}
 			m.selectedIdx = 0
 			m.updateDetailContent()
@@ -464,7 +463,7 @@ func (m model) View() string {
 
 		// Build logo box with fixed height
 		logoContent := renderLogo(leftWidth - 2)
-		logoBox := panelStyle.Copy().
+		logoBox := panelStyle.
 			Width(leftWidth - 2).
 			Height(logoContentHeight).
 			Render(logoContent)
@@ -505,9 +504,9 @@ func (m model) View() string {
 }
 
 func (m model) buildPanel(title, content string, width, height int, active bool) string {
-	borderStyle := panelStyle.Copy()
+	borderStyle := panelStyle
 	if active {
-		borderStyle = activePanelStyle.Copy()
+		borderStyle = activePanelStyle
 	}
 
 	// Inner content dimensions (width - 2 for border, height - 2 for border - 1 for title)
@@ -591,9 +590,3 @@ func (m model) renderMessageList(width, height int) string {
 	return sb.String()
 }
 
-func truncate(s string, max int) string {
-	if len(s) <= max {
-		return s
-	}
-	return s[:max-3] + "..."
-}

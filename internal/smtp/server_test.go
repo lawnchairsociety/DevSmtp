@@ -48,7 +48,9 @@ func setupTestServer(t *testing.T) (*Server, *database.DB, *Logger, int, func())
 	server := NewServer(cfg, db, logger)
 
 	// Start server in background
-	go server.ListenAndServe()
+	go func() {
+		_ = server.ListenAndServe()
+	}()
 
 	// Wait for server to be ready
 	time.Sleep(50 * time.Millisecond)
@@ -74,7 +76,9 @@ func connectToServer(t *testing.T, port int) net.Conn {
 
 func readLine(t *testing.T, conn net.Conn) string {
 	t.Helper()
-	conn.SetReadDeadline(time.Now().Add(2 * time.Second))
+	if err := conn.SetReadDeadline(time.Now().Add(2 * time.Second)); err != nil {
+		t.Fatalf("failed to set read deadline: %v", err)
+	}
 	reader := bufio.NewReader(conn)
 	line, err := reader.ReadString('\n')
 	if err != nil {
@@ -136,7 +140,7 @@ func TestEHLO(t *testing.T) {
 	var responses []string
 	reader := bufio.NewReader(conn)
 	for {
-		conn.SetReadDeadline(time.Now().Add(2 * time.Second))
+		_ = conn.SetReadDeadline(time.Now().Add(2 * time.Second))
 		line, err := reader.ReadString('\n')
 		if err != nil {
 			break
@@ -225,7 +229,7 @@ func TestFullMessageFlow(t *testing.T) {
 
 	reader := bufio.NewReader(conn)
 	readLineReader := func() string {
-		conn.SetReadDeadline(time.Now().Add(2 * time.Second))
+		_ = conn.SetReadDeadline(time.Now().Add(2 * time.Second))
 		line, _ := reader.ReadString('\n')
 		return strings.TrimSpace(line)
 	}
