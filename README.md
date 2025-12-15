@@ -5,7 +5,10 @@
 [![Build Status](https://github.com/lawnchairsociety/devsmtp/actions/workflows/build.yml/badge.svg)](https://github.com/lawnchairsociety/devsmtp/actions)
 [![Go Report Card](https://goreportcard.com/badge/github.com/lawnchairsociety/devsmtp)](https://goreportcard.com/report/github.com/lawnchairsociety/devsmtp)
 
+
 A lightweight SMTP server for developers to test email functionality in their applications. DevSmtp captures all emails sent to it and stores them in a SQLite database, providing a terminal-based UI for viewing and managing messages.
+
+![DevSmtp TUI](.github/assets/devsmtp-screenshot.png)
 
 ## Features
 
