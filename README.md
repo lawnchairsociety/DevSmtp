@@ -2,7 +2,7 @@
 
 [![Go Version](https://img.shields.io/badge/Go-1.21+-00ADD8?style=flat&logo=go)](https://go.dev/)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Build Status](https://github.com/lawnchairsociety/devsmtp/actions/workflows/ci.yml/badge.svg)](https://github.com/lawnchairsociety/devsmtp/actions)
+[![Build Status](https://github.com/lawnchairsociety/devsmtp/actions/workflows/build.yml/badge.svg)](https://github.com/lawnchairsociety/devsmtp/actions)
 [![Go Report Card](https://goreportcard.com/badge/github.com/lawnchairsociety/devsmtp)](https://goreportcard.com/report/github.com/lawnchairsociety/devsmtp)
 
 A lightweight SMTP server for developers to test email functionality in their applications. DevSmtp captures all emails sent to it and stores them in a SQLite database, providing a terminal-based UI for viewing and managing messages.
