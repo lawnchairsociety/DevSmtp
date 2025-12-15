@@ -127,7 +127,6 @@ DevSmtp implements the following SMTP commands per RFC 5321:
 The terminal UI provides:
 
 - List view of all captured emails
-- Search and filter by sender, recipient, subject
 - View full email headers and body
 - Delete individual or all messages
 - Real-time updates as new emails arrive
